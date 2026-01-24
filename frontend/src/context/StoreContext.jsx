@@ -1,0 +1,30 @@
+import { createContext, useEffect, useState } from "react";
+import axios from "axios"
+import { useNavigate } from "react-router-dom";
+
+
+export const StoreContext = createContext();
+
+const StoreContextProvider = (props) =>{
+
+
+
+    
+    const backendUrl  = import.meta.env.VITE_BACKEND_URL;
+    const navigate = useNavigate();
+
+   
+    
+    const value ={
+        
+        navigate
+    }
+
+    return (
+        <StoreContext.Provider value={value}>
+            {props.children}
+        </StoreContext.Provider>
+    )
+}
+
+export default StoreContextProvider;
