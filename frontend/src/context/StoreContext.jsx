@@ -12,12 +12,24 @@ const StoreContextProvider = (props) =>{
     
     const backendUrl  = import.meta.env.VITE_BACKEND_URL;
     const navigate = useNavigate();
+    const [doctors, setDoctors] = useState([])
+
+    const addDoctor = (doctor) => {
+        setDoctors((prev) => [...prev, doctor])
+    }
+
+    useEffect(() => {
+        setDoctors(doctors)
+    }, [doctors])
 
    
     
     const value ={
         
-        navigate
+        navigate,
+        backendUrl,
+        doctors,
+        addDoctor
     }
 
     return (
