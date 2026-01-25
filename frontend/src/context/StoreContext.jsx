@@ -7,20 +7,34 @@ export const StoreContext = createContext();
 
 const StoreContextProvider = (props) =>{
 
-
-
     
     const backendUrl  = import.meta.env.VITE_BACKEND_URL;
     const navigate = useNavigate();
     const [doctors, setDoctors] = useState([])
+    const [selectedDoctor, setSelectedDoctor] = useState(null)
 
-    const addDoctor = (doctor) => {
-        setDoctors((prev) => [...prev, doctor])
+
+    const fetchDoctors = async () => {
+        try {
+        const res = await axios.get(`${backendUrl}/api/doctors`)
+        setDoctors(res.data)
+        } catch (error) {
+        console.error('Error fetching doctors:', error)
+        }
+    }
+
+    const addDoctor = async (doctor) => {
+        try {
+        await axios.post(`${backendUrl}/api/doctors/add`, doctor)
+        fetchDoctors()
+        } catch (error) {
+        console.error('Error adding doctor:', error)
+        }
     }
 
     useEffect(() => {
-        setDoctors(doctors)
-    }, [doctors])
+        fetchDoctors()
+    }, [])
 
    
     
@@ -29,7 +43,9 @@ const StoreContextProvider = (props) =>{
         navigate,
         backendUrl,
         doctors,
-        addDoctor
+        addDoctor,
+        selectedDoctor,
+        setSelectedDoctor
     }
 
     return (
