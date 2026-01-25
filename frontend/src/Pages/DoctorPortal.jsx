@@ -5,7 +5,7 @@ import DoctorPatientList from '../components/DoctorPatientList'
 import { useNavigate } from 'react-router-dom'
 
 const DoctorPortal = () => {
-  const { selectedDoctor } = useContext(StoreContext)
+  const { selectedDoctor,fetchDoctorPatients } = useContext(StoreContext)
   const navigate = useNavigate()
 
   const [patients, setPatients] = useState([])
@@ -16,6 +16,12 @@ const DoctorPortal = () => {
       navigate('/doctor')
     }
   }, [selectedDoctor, navigate])
+
+  useEffect(() => {
+  if (selectedDoctor) {
+    fetchDoctorPatients(selectedDoctor._id)
+  }
+}, [selectedDoctor])
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">

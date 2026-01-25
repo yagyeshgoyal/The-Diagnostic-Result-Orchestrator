@@ -1,6 +1,47 @@
 const Patient = require('../models/Patient')
 const Doctor = require('../models/Doctor')
 
+addLabData = async (req, res) => {
+  try {
+    const { patientName, age, doctorId, unit, quantity } = req.body
+
+    let patient = await Patient.findOne({ patientName, age })
+
+    if (patient) {
+      // patient exists → add new doctor record
+      patient.doctors.push({
+        doctor: doctorId,
+        unit,
+        quantity
+      })
+
+      await patient.save()
+    } else {
+      // new patient
+      patient = await Patient.create({
+        patientName,
+        age,
+        doctors: [
+          {
+            doctor: doctorId,
+            unit,
+            quantity
+          }
+        ]
+      })
+    }
+
+    // Optional: keep reverse reference in Doctor
+    await Doctor.findByIdAndUpdate(doctorId, {
+      $addToSet: { patients: patient._id }
+    })
+
+    res.status(201).json(patient)
+  } catch (error) {
+    res.status(400).json({ message: error.message })
+  }
+}
+
 addPatient = async (req, res) => {
 
   try {
@@ -24,16 +65,14 @@ addPatient = async (req, res) => {
   }
 }
 
-getPatientsByDoctor = async(req, res) => {
-  const patients = await Patient.find({
-    doctor: req.params.doctorId
-  })
+getPatientsByDoctor = async (req, res) => {
+  const doctorId = req.params.doctorId
 
-  res.json({
-    success: true,
-    count: patients.length,
-    data: patients
-  })
+  const patients = await Patient.find({
+    'doctors.doctor': doctorId
+  }).populate('doctors.doctor')
+
+  res.json(patients)
 }
 
-module.exports = { addPatient, getPatientsByDoctor }
+module.exports = { addPatient, getPatientsByDoctor,addLabData }

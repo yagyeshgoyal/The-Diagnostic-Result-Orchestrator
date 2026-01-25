@@ -1,31 +1,29 @@
 const mongoose = require('mongoose')
 
-const patientSchema = new mongoose.Schema(
-  {
-    patientName: {
-      type: String,
-      required: true
-    },
-    age: {
-      type: Number,
-      required: true
-    },
-    unit: {
-      type: String,
-      enum: ['ml/dL', 'g/dL'],
-      required: true
-    },
-    quantity: {
-      type: Number,
-      required: true
-    },
-    doctor: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Doctor',
-      required: true
-    }
+const patientDoctorSchema = new mongoose.Schema({
+  doctor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Doctor',
+    required: true
   },
-  { timestamps: true }
-)
+  unit: String,
+  quantity: Number,
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+})
+
+const patientSchema = new mongoose.Schema({
+  patientName: {
+    type: String,
+    required: true
+  },
+  age: {
+    type: Number,
+    required: true
+  },
+  doctors: [patientDoctorSchema] // 👈 MULTIPLE DOCTORS
+})
 
 module.exports = mongoose.model('Patient', patientSchema)

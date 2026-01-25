@@ -1,36 +1,40 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { StoreContext } from '../context/StoreContext'
 
-const DoctorPatientList = ({ patients }) => {
+const DoctorPatientList = ({ onSelectPatient }) => {
   const [search, setSearch] = useState('')
+  const { doctorPatients } = useContext(StoreContext)
 
-  const filteredPatients = patients.filter((patient) =>
-    patient.toLowerCase().includes(search.toLowerCase())
-  )
+  const filteredPatients = Array.isArray(doctorPatients)
+    ? doctorPatients.filter((patient) =>
+        patient.patientName.toLowerCase().includes(search.toLowerCase())
+      )
+    : []
 
   return (
     <div className="bg-white p-6 rounded-xl shadow h-full">
       <h3 className="text-xl font-bold mb-4">Patients</h3>
 
-      {/* Search Bar */}
       <input
         type="text"
         placeholder="Search patient..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="w-full max-w-md p-3 border rounded-lg mb-4"
+        className="w-full p-3 border rounded-lg mb-4"
       />
 
-      {/* Patient List */}
       {filteredPatients.length === 0 ? (
         <p className="text-gray-500">No patients found</p>
       ) : (
-        <ul className="space-y-3">
-          {filteredPatients.map((patient, index) => (
+        <ul className="space-y-3 max-h-[420px] overflow-y-auto">
+          {filteredPatients.map((patient) => (
             <li
-              key={index}
-              className="p-3 border rounded-lg hover:bg-gray-50"
+              key={patient._id}
+              onClick={() => onSelectPatient(patient)}
+              className="p-3 border rounded-lg cursor-pointer hover:bg-blue-50"
             >
-              {patient}
+              <p className="font-semibold">{patient.patientName}</p>
+              <p className="text-sm text-gray-600">Age: {patient.age}</p>
             </li>
           ))}
         </ul>
