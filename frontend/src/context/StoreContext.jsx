@@ -14,6 +14,7 @@ const StoreContextProvider = (props) =>{
     const [selectedDoctor, setSelectedDoctor] = useState(null)
     const [doctorPatients, setDoctorPatients] = useState([])
     const [doctorSelectedPatient, setDoctorSelectedPatient] = useState(null)
+    const [allPatients, setAllPatients] = useState([])
 
 
     const fetchDoctors = async () => {
@@ -54,8 +55,18 @@ const StoreContextProvider = (props) =>{
         navigate('/doctor/patient')
     }
 
+    const fetchAllPatients = async () => {
+        try {
+        const res = await axios.get(`${backendUrl}/api/patients`)
+        setAllPatients(res.data)
+        } catch (error) {
+        console.error('Error fetching patients', error)
+        }
+    }
+
     useEffect(() => {
         fetchDoctors()
+        fetchAllPatients()
     }, [])
 
     useEffect(() => {
@@ -79,7 +90,8 @@ const StoreContextProvider = (props) =>{
         fetchDoctorPatients,
         doctorSelectedPatient,
         setDoctorSelectedPatient,
-        selectDoctorPatient
+        selectDoctorPatient,
+        allPatients
     }
 
     return (

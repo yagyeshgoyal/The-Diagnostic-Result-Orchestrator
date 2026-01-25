@@ -75,4 +75,21 @@ getPatientsByDoctor = async (req, res) => {
   res.json(patients)
 }
 
-module.exports = { addPatient, getPatientsByDoctor,addLabData }
+getAllPatients = async (req, res) => {
+  try {
+    const patients = await Patient.find().populate({
+      path: 'doctors.doctor',
+      select: 'name specialty'
+    })
+
+    res.status(200).json(patients)
+  } catch (error) {
+    console.error(' Fetch patients error:', error)
+    res.status(500).json({
+      message: 'Failed to fetch patients',
+      error: error.message
+    })
+  }
+}
+
+module.exports = { addPatient, getPatientsByDoctor,addLabData,getAllPatients }

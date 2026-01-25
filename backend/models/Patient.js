@@ -23,7 +23,7 @@ const patientSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  doctors: [patientDoctorSchema] // 👈 MULTIPLE DOCTORS
+  doctors: [patientDoctorSchema] // MULTIPLE DOCTORS
 })
 
 module.exports = mongoose.model('Patient', patientSchema)
