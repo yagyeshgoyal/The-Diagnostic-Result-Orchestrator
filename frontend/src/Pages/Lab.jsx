@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
+import { useContext } from 'react'
+import { StoreContext } from '../context/StoreContext'
 
 const Lab = () => {
+  const { doctors,navigate } = useContext(StoreContext)
+
   const [formData, setFormData] = useState({
     patientName: '',
     age: '',
@@ -55,6 +59,16 @@ const Lab = () => {
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md space-y-4"
       >
+        <div className="flex items-center mb-2">
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            className="text-blue-600 font-semibold hover:underline"
+          >
+            ← Back
+          </button>
+        </div>
+
         <h2 className="text-2xl font-bold text-center text-blue-600">
           Lab Entry Form
         </h2>
@@ -77,23 +91,23 @@ const Lab = () => {
           className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
-        <input
-          type="text"
+        <select
           name="doctor"
-          placeholder="Assign Doctor"
           value={formData.doctor}
           onChange={handleChange}
-          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+          size={Math.min(doctors.length, 5)}
+          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 overflow-y-auto"
+        >
+          <option value="">Select Doctor</option>
 
-        <input
-          type="text"
-          name="diagnostic"
-          placeholder="Diagnostic"
-          value={formData.diagnostic}
-          onChange={handleChange}
-          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+          {doctors.map((doc) => (
+            <option key={doc._id} value={doc.name}>
+              {doc.name} — {doc.specialty}
+            </option>
+          ))}
+        </select>
+
+
 
         <div className="flex gap-4">
           <select
