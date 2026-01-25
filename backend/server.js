@@ -21,6 +21,8 @@ db.connect();
 const doctorRoutes = require('./routes/doctorRoutes')
 app.use('/api/doctors', doctorRoutes)
 
+app.use('/api/patients', require('./routes/patientRoutes'))
+
 // api
 app.get('/', (req,res)=>{
     res.send("API Working");

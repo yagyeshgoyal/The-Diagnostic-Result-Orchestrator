@@ -9,7 +9,13 @@ const doctorSchema = new mongoose.Schema(
     specialty: {
       type: String,
       required: true
-    }
+    },
+    patients: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Patient'
+      }
+    ]
   },
   { timestamps: true }
 )

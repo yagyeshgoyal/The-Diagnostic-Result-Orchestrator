@@ -26,4 +26,18 @@ const getDoctors = async (req, res) => {
   }
 }
 
-module.exports = { addDoctor, getDoctors }
+getDoctorWithPatients = async (req, res) => {
+  try {
+    const doctor = await Doctor.findById(req.params.id)
+      .populate('patients') 
+
+    res.json(doctor)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+module.exports = { addDoctor, getDoctors , getDoctorWithPatients}
+
+
+

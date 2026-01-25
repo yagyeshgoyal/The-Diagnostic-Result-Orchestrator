@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
+import axios from 'axios'
 import { useContext } from 'react'
 import { StoreContext } from '../context/StoreContext'
 
 const Lab = () => {
-  const { doctors,navigate } = useContext(StoreContext)
+  const { doctors,navigate, backendUrl } = useContext(StoreContext)
 
   const [formData, setFormData] = useState({
     patientName: '',
     age: '',
     doctor: '',
-    diagnostic: '',
     unit: '',
     quantity: ''
   })
@@ -20,15 +20,13 @@ const Lab = () => {
     setFormData({ ...formData, [name]: value })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
-    // simple validation
     if (
       !formData.patientName ||
       !formData.age ||
       !formData.doctor ||
-      !formData.diagnostic ||
       !formData.unit ||
       !formData.quantity
     ) {
@@ -36,19 +34,29 @@ const Lab = () => {
       return
     }
 
-    console.log('Lab Data:', formData)
+    try {
+      console.log('Submitting lab data:', formData)
+      await axios.post(`${backendUrl}/api/patients/add`, {
+        patientName: formData.patientName,
+        age: formData.age,
+        doctorId: formData.doctor,
+        unit: formData.unit,
+        quantity: formData.quantity
+      })
 
-    toast.success('Lab form submitted successfully!')
+      toast.success('Lab data saved successfully')
 
-    // clear form
-    setFormData({
-      patientName: '',
-      age: '',
-      doctor: '',
-      diagnostic: '',
-      unit: '',
-      quantity: ''
-    })
+      setFormData({
+        patientName: '',
+        age: '',
+        doctor: '',
+        unit: '',
+        quantity: ''
+      })
+    } catch (error) {
+      toast.error('Failed to save lab data')
+      console.error(error)
+    }
   }
 
   return (
@@ -101,7 +109,7 @@ const Lab = () => {
           <option value="">Select Doctor</option>
 
           {doctors.map((doc) => (
-            <option key={doc._id} value={doc.name}>
+            <option key={doc._id} value={doc._id}>
               {doc.name} — {doc.specialty}
             </option>
           ))}
