@@ -1,15 +1,22 @@
 import React, { useState, useContext } from 'react'
 import { StoreContext } from '../context/StoreContext'
 
-const DoctorPatientList = ({ onSelectPatient }) => {
+const DoctorPatientList = () => {
   const [search, setSearch] = useState('')
-  const { doctorPatients } = useContext(StoreContext)
+  const { doctorPatients,setDoctorSelectedPatient,navigate,
+    selectDoctorPatient
+   } = useContext(StoreContext)
 
   const filteredPatients = Array.isArray(doctorPatients)
     ? doctorPatients.filter((patient) =>
         patient.patientName.toLowerCase().includes(search.toLowerCase())
       )
     : []
+
+
+    const handleClick = (patient) => {
+        selectDoctorPatient(patient)
+    }
 
   return (
     <div className="bg-white p-6 rounded-xl shadow h-full">
@@ -30,7 +37,7 @@ const DoctorPatientList = ({ onSelectPatient }) => {
           {filteredPatients.map((patient) => (
             <li
               key={patient._id}
-              onClick={() => onSelectPatient(patient)}
+              onClick={() => handleClick(patient)}
               className="p-3 border rounded-lg cursor-pointer hover:bg-blue-50"
             >
               <p className="font-semibold">{patient.patientName}</p>

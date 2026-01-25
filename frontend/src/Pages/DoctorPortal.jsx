@@ -45,7 +45,7 @@ const DoctorPortal = () => {
 
         {/* Right Panel */}
         <div className="md:col-span-3">
-          <DoctorPatientList patients={patients} />
+          <DoctorPatientList/>
         </div>
       </div>
     </div>
