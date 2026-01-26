@@ -11,6 +11,7 @@ const Lab = () => {
     patientName: '',
     age: '',
     doctor: '',
+    diagnosis: '',
     unit: '',
     quantity: ''
   })
@@ -27,6 +28,7 @@ const Lab = () => {
       !formData.patientName ||
       !formData.age ||
       !formData.doctor ||
+      !formData.diagnosis ||
       !formData.unit ||
       !formData.quantity
     ) {
@@ -40,6 +42,7 @@ const Lab = () => {
         patientName: formData.patientName,
         age: formData.age,
         doctorId: formData.doctor,
+        diagnosis: formData.diagnosis,
         unit: formData.unit,
         quantity: formData.quantity
       })
@@ -50,6 +53,7 @@ const Lab = () => {
         patientName: '',
         age: '',
         doctor: '',
+        diagnosis: '',
         unit: '',
         quantity: ''
       })
@@ -103,8 +107,7 @@ const Lab = () => {
           name="doctor"
           value={formData.doctor}
           onChange={handleChange}
-          size={Math.min(doctors.length, 5)}
-          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 overflow-y-auto"
+          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
           <option value="">Select Doctor</option>
 
@@ -115,6 +118,18 @@ const Lab = () => {
           ))}
         </select>
 
+        <select
+          name="diagnosis"
+          value={formData.diagnosis}
+          onChange={handleChange}
+          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+        >
+          <option value="">Select Diagnosis</option>
+          <option value="Glucose">Glucose</option>
+          <option value="Cholesterol">Cholesterol</option>
+          <option value="Hemoglobin">Hemoglobin</option>
+          <option value="Creatinine">Creatinine</option>
+        </select>
 
 
         <div className="flex gap-4">
@@ -125,7 +140,7 @@ const Lab = () => {
             className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-400"
           >
             <option value="">Select Unit</option>
-            <option value="ml/dL">ml/dL</option>
+            <option value="ml/dL">mg/dL</option>
             <option value="g/dL">g/dL</option>
           </select>
 

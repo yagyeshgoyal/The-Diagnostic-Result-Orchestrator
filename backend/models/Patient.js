@@ -6,6 +6,10 @@ const patientDoctorSchema = new mongoose.Schema({
     ref: 'Doctor',
     required: true
   },
+  diagnosis: {
+    type: String,
+    required: true
+  },
   unit: String,
   quantity: Number,
   createdAt: {

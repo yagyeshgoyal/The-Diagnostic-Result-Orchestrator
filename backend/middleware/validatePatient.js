@@ -4,6 +4,7 @@ const validatePatient = (req, res, next) => {
     age,
     unit,
     quantity,
+    diagnosis,
     doctorId
   } = req.body
 
@@ -11,6 +12,7 @@ const validatePatient = (req, res, next) => {
     !patientName ||
     !age ||
     !unit ||
+    !diagnosis ||
     !quantity ||
     !doctorId
   ) {

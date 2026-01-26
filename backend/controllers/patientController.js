@@ -3,7 +3,7 @@ const Doctor = require('../models/Doctor')
 
 addLabData = async (req, res) => {
   try {
-    const { patientName, age, doctorId, unit, quantity } = req.body
+    const { patientName, age, doctorId,diagnosis, unit, quantity } = req.body
 
     let patient = await Patient.findOne({ patientName, age })
 
@@ -11,6 +11,7 @@ addLabData = async (req, res) => {
       // patient exists → add new doctor record
       patient.doctors.push({
         doctor: doctorId,
+        diagnosis,
         unit,
         quantity
       })
@@ -24,6 +25,7 @@ addLabData = async (req, res) => {
         doctors: [
           {
             doctor: doctorId,
+            diagnosis,
             unit,
             quantity
           }
