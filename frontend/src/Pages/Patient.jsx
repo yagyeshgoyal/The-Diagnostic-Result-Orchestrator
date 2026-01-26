@@ -1,9 +1,10 @@
 import React, { useState, useContext } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import { StoreContext } from '../context/StoreContext'
+import { User, Calendar } from 'lucide-react'
 
 const Patient = () => {
-  const { allPatients, navigate,setSelectedPatient } = useContext(StoreContext)
+  const { allPatients, navigate, setSelectedPatient } = useContext(StoreContext)
 
   const [formData, setFormData] = useState({
     name: '',
@@ -41,12 +42,18 @@ const Patient = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div
+      className="min-h-screen flex items-center justify-center 
+                 bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100"
+    >
       <Toaster position="top-right" />
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md space-y-4 fade-in"
+        className="bg-white/80 backdrop-blur-xl 
+                   p-8 rounded-2xl shadow-xl 
+                   w-full max-w-md space-y-5 
+                   animate-slideUp"
       >
         {/* Back Button */}
         <button
@@ -57,31 +64,62 @@ const Patient = () => {
           ← Back
         </button>
 
-        <h2 className="text-2xl font-bold text-center text-blue-600">
-          Patient Portal
-        </h2>
+        {/* Header */}
+        <div className="text-center space-y-1">
+          <h2 className="text-3xl font-bold text-blue-600">
+            Patient Portal
+          </h2>
+          <p className="text-gray-500 text-sm">
+            Access your diagnosis & doctor details
+          </p>
+        </div>
 
-        <input
-          type="text"
-          name="name"
-          placeholder="Patient Name"
-          value={formData.name}
-          onChange={handleChange}
-          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
-        />
+        {/* Name Input */}
+        <div className="relative">
+          <User
+            className="absolute top-3.5 left-3 text-gray-400"
+            size={18}
+          />
+          <input
+            type="text"
+            name="name"
+            placeholder="Patient Name"
+            value={formData.name}
+            onChange={handleChange}
+            className="w-full pl-10 p-3 border rounded-xl 
+                       focus:ring-2 focus:ring-blue-400 
+                       focus:outline-none transition"
+          />
+        </div>
 
-        <input
-          type="number"
-          name="age"
-          placeholder="Age"
-          value={formData.age}
-          onChange={handleChange}
-          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
-        />
+        {/* Age Input */}
+        <div className="relative">
+          <Calendar
+            className="absolute top-3.5 left-3 text-gray-400"
+            size={18}
+          />
+          <input
+            type="number"
+            name="age"
+            placeholder="Age"
+            value={formData.age}
+            onChange={handleChange}
+            className="w-full pl-10 p-3 border rounded-xl 
+                       focus:ring-2 focus:ring-blue-400 
+                       focus:outline-none transition"
+          />
+        </div>
 
+        {/* Submit */}
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+          className="w-full bg-gradient-to-r 
+                     from-blue-600 to-indigo-600 
+                     text-white p-3 rounded-xl 
+                     font-semibold 
+                     hover:scale-[1.02] 
+                     active:scale-95 
+                     transition-all shadow-lg"
         >
           Check In
         </button>

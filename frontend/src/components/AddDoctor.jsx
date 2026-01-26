@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import toast from 'react-hot-toast'
-import { useContext } from 'react'
 import { StoreContext } from '../context/StoreContext'
+import { X, UserPlus } from 'lucide-react'
 
 const AddDoctor = ({ onClose }) => {
   const { addDoctor } = useContext(StoreContext)
+
   const [formData, setFormData] = useState({
     name: '',
     specialty: ''
@@ -23,42 +24,92 @@ const AddDoctor = ({ onClose }) => {
     }
 
     addDoctor(formData)
-    toast.success('Doctor added')
+    toast.success('Doctor added successfully')
 
     setFormData({ name: '', specialty: '' })
     onClose()
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-xl w-full max-w-sm">
-        <h2 className="text-xl font-bold mb-4 text-center">Add Doctor</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center 
+                    bg-black/50 backdrop-blur-sm animate-fadeIn">
+      
+      {/* Modal */}
+      <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl 
+                      p-8 animate-scaleIn relative">
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            name="name"
-            placeholder="Doctor Name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full p-3 border rounded-lg"
-          />
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
+        >
+          <X size={22} />
+        </button>
 
-          <input
-            name="specialty"
-            placeholder="Specialty"
-            value={formData.specialty}
-            onChange={handleChange}
-            className="w-full p-3 border rounded-lg"
-          />
+        {/* Header */}
+        <div className="flex flex-col items-center mb-6">
+          <div className="w-14 h-14 rounded-full bg-blue-100 
+                          flex items-center justify-center mb-3">
+            <UserPlus className="text-blue-600" size={28} />
+          </div>
 
-          <div className="flex gap-3">
-            <button className="w-full bg-blue-600 text-white p-2 rounded-lg">
-              Add
+          <h2 className="text-2xl font-bold text-gray-800">
+            Add New Doctor
+          </h2>
+          <p className="text-sm text-gray-500 mt-1">
+            Enter doctor details below
+          </p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="text-sm font-medium text-gray-600">
+              Doctor Name
+            </label>
+            <input
+              name="name"
+              placeholder="Dr. John Doe"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full mt-1 p-3 border rounded-xl 
+                         focus:ring-2 focus:ring-blue-500 
+                         focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-gray-600">
+              Specialty
+            </label>
+            <input
+              name="specialty"
+              placeholder="Cardiologist"
+              value={formData.specialty}
+              onChange={handleChange}
+              className="w-full mt-1 p-3 border rounded-xl 
+                         focus:ring-2 focus:ring-blue-500 
+                         focus:outline-none"
+            />
+          </div>
+
+          {/* Actions */}
+          <div className="flex gap-4 pt-2">
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-3 
+                         rounded-xl font-semibold 
+                         hover:bg-blue-700 transition"
+            >
+              Add Doctor
             </button>
+
             <button
               type="button"
               onClick={onClose}
-              className="w-full bg-gray-300 p-2 rounded-lg"
+              className="w-full bg-gray-100 text-gray-700 py-3 
+                         rounded-xl font-semibold 
+                         hover:bg-gray-200 transition"
             >
               Cancel
             </button>
