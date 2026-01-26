@@ -9,6 +9,7 @@ import Patient from './Pages/Patient.jsx'
 import Doctor from './Pages/Doctor.jsx'
 import DoctorPortal from './Pages/DoctorPortal.jsx'
 import DoctorPatientPortal from './Pages/DoctorPatientPortal.jsx'
+import PatientPortal from './Pages/PatientPortal.jsx'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -22,6 +23,9 @@ function App() {
         <Route path="/doctor" element={<Doctor />} />
         <Route path="/doctor/:id" element={<DoctorPortal />} />
         <Route path="/doctor/patient" element={<DoctorPatientPortal />} />
+        <Route path="/patient-portal" element={<PatientPortal />} />
+
+
       </Routes>
     </>
   )

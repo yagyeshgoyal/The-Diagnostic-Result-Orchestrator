@@ -3,9 +3,7 @@ import toast, { Toaster } from 'react-hot-toast'
 import { StoreContext } from '../context/StoreContext'
 
 const Patient = () => {
-  const { allPatients } = useContext(StoreContext)
-
-  console.log(allPatients)
+  const { allPatients, navigate,setSelectedPatient } = useContext(StoreContext)
 
   const [formData, setFormData] = useState({
     name: '',
@@ -32,7 +30,9 @@ const Patient = () => {
     )
 
     if (patient) {
-      toast.success(`Welcome ${patient.patientName} 👋`)
+      toast.success(`Welcome ${patient.patientName}`)
+      setSelectedPatient(patient)
+      navigate('/patient-portal')
     } else {
       toast.error('Patient not found')
     }
@@ -48,6 +48,15 @@ const Patient = () => {
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md space-y-4 fade-in"
       >
+        {/* Back Button */}
+        <button
+          type="button"
+          onClick={() => navigate('/')}
+          className="text-blue-600 font-semibold hover:underline"
+        >
+          ← Back
+        </button>
+
         <h2 className="text-2xl font-bold text-center text-blue-600">
           Patient Portal
         </h2>

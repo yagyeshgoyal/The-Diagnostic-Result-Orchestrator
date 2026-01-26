@@ -15,6 +15,10 @@ const StoreContextProvider = (props) =>{
     const [doctorPatients, setDoctorPatients] = useState([])
     const [doctorSelectedPatient, setDoctorSelectedPatient] = useState(null)
     const [allPatients, setAllPatients] = useState([])
+    const [selectedPatient, setSelectedPatient] = useState(() => {
+    const saved = localStorage.getItem('selectedPatient')
+    return saved ? JSON.parse(saved) : null
+  })
 
 
     const fetchDoctors = async () => {
@@ -64,6 +68,7 @@ const StoreContextProvider = (props) =>{
         }
     }
 
+
     useEffect(() => {
         fetchDoctors()
         fetchAllPatients()
@@ -75,6 +80,15 @@ const StoreContextProvider = (props) =>{
         setDoctorSelectedPatient(JSON.parse(storedPatient))
         }
     }, [])
+
+    useEffect(() => {
+        if (selectedPatient) {
+        localStorage.setItem(
+            'selectedPatient',
+            JSON.stringify(selectedPatient)
+        )
+        }
+    }, [selectedPatient])
 
    
     
@@ -91,7 +105,9 @@ const StoreContextProvider = (props) =>{
         doctorSelectedPatient,
         setDoctorSelectedPatient,
         selectDoctorPatient,
-        allPatients
+        allPatients,
+        selectedPatient,
+        setSelectedPatient,
     }
 
     return (
