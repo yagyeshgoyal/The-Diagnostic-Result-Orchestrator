@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { StoreContext } from '../context/StoreContext'
+import { DIAGNOSIS_CONFIG, isNormalValue } from '../config/diagnosisConfig'
 
 const PatientPortal = () => {
   const { selectedPatient, navigate } = useContext(StoreContext)
@@ -45,35 +46,53 @@ const PatientPortal = () => {
         </p>
       ) : (
         <div className="grid sm:grid-cols-2 gap-6">
-          {selectedPatient.doctors.map((d, index) => (
-            <div
-              key={index}
-              className="bg-white p-5 rounded-xl border shadow card-hover slide-up"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <p className="text-sm text-gray-500 mb-2">
-                {new Date(d.createdAt).toLocaleDateString()}
-              </p>
+          {selectedPatient.doctors.map((d, index) => {
+            const config = DIAGNOSIS_CONFIG[d.diagnosis]
+            const isNormal = isNormalValue(
+              d.quantity,
+              config?.normalRange
+            )
 
-              <p>
-                <span className="font-semibold">Doctor:</span>{' '}
-                {d.doctor?.name || 'N/A'}
-              </p>
+            return (
+              <div
+                key={index}
+                className="bg-white p-5 rounded-xl border shadow card-hover slide-up"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <p className="text-sm text-gray-500 mb-2">
+                  {new Date(d.createdAt).toLocaleDateString()}
+                </p>
 
-              <p className="text-sm text-gray-500">
-                {d.doctor?.specialty}
-              </p>
+                <p>
+                  <span className="font-semibold">Doctor:</span>{' '}
+                  {d.doctor?.name || 'N/A'}
+                </p>
 
-              <p>
-                <span className="font-semibold">Unit:</span> {d.unit}
-              </p>
+                <p className="text-sm text-gray-500 mb-2">
+                  {d.doctor?.specialty}
+                </p>
 
-              <p>
-                <span className="font-semibold">Quantity:</span>{' '}
-                {d.quantity}
-              </p>
-            </div>
-          ))}
+                <p>
+                  <span className="font-semibold">Diagnosis:</span>{' '}
+                  {d.diagnosis}
+                </p>
+
+                <p className="text-gray-600">
+                  <span className="font-semibold">Normal Range:</span>{' '}
+                  {config?.normalRange || 'N/A'} {config?.unit}
+                </p>
+
+                <p
+                  className={`font-semibold ${
+                    isNormal ? 'text-green-600' : 'text-red-600'
+                  }`}
+                >
+                  Result: {d.quantity} {config?.unit}
+                </p>
+              </div>
+            )
+          })}
+
         </div>
       )}
     </div>

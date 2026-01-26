@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import axios from 'axios'
-import { useContext } from 'react'
 import { StoreContext } from '../context/StoreContext'
+import { FlaskConical, ArrowLeft } from 'lucide-react'
 
 const Lab = () => {
-  const { doctors,navigate, backendUrl } = useContext(StoreContext)
+  const { doctors, navigate, backendUrl } = useContext(StoreContext)
 
   const [formData, setFormData] = useState({
     patientName: '',
@@ -24,20 +24,12 @@ const Lab = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (
-      !formData.patientName ||
-      !formData.age ||
-      !formData.doctor ||
-      !formData.diagnosis ||
-      !formData.unit ||
-      !formData.quantity
-    ) {
+    if (Object.values(formData).some(v => !v)) {
       toast.error('Please fill all fields')
       return
     }
 
     try {
-      console.log('Submitting lab data:', formData)
       await axios.post(`${backendUrl}/api/patients/add`, {
         patientName: formData.patientName,
         age: formData.age,
@@ -59,39 +51,46 @@ const Lab = () => {
       })
     } catch (error) {
       toast.error('Failed to save lab data')
-      console.error(error)
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
       <Toaster position="top-right" />
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md space-y-4"
+        className="bg-white/80 backdrop-blur-xl p-8 rounded-2xl shadow-2xl 
+                   w-full max-w-md space-y-5 animate-slideUp"
       >
-        <div className="flex items-center mb-2">
+        {/* Header */}
+        <div className="flex items-center justify-between">
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="text-blue-600 font-semibold hover:underline"
+            className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
           >
-            ← Back
+            <ArrowLeft size={18} /> Back
           </button>
+
+          <FlaskConical className="text-blue-600" size={28} />
         </div>
 
-        <h2 className="text-2xl font-bold text-center text-blue-600">
-          Lab Entry Form
+        <h2 className="text-3xl font-bold text-center text-blue-700">
+          Lab Entry
         </h2>
+        <p className="text-center text-gray-500 text-sm">
+          Add patient diagnostic data
+        </p>
 
+        {/* Inputs */}
         <input
           type="text"
           name="patientName"
           placeholder="Patient Name"
           value={formData.patientName}
           onChange={handleChange}
-          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="input-style"
         />
 
         <input
@@ -100,18 +99,17 @@ const Lab = () => {
           placeholder="Age"
           value={formData.age}
           onChange={handleChange}
-          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="input-style"
         />
 
         <select
           name="doctor"
           value={formData.doctor}
           onChange={handleChange}
-          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="input-style"
         >
           <option value="">Select Doctor</option>
-
-          {doctors.map((doc) => (
+          {doctors.map(doc => (
             <option key={doc._id} value={doc._id}>
               {doc.name} — {doc.specialty}
             </option>
@@ -122,44 +120,44 @@ const Lab = () => {
           name="diagnosis"
           value={formData.diagnosis}
           onChange={handleChange}
-          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="input-style"
         >
           <option value="">Select Diagnosis</option>
-          <option value="Glucose">Glucose</option>
-          <option value="Cholesterol">Cholesterol</option>
-          <option value="Hemoglobin">Hemoglobin</option>
-          <option value="Creatinine">Creatinine</option>
+          <option>Glucose</option>
+          <option>Cholesterol</option>
+          <option>Hemoglobin</option>
+          <option>Creatinine</option>
         </select>
-
 
         <div className="flex gap-4">
           <select
             name="unit"
             value={formData.unit}
             onChange={handleChange}
-            className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-400"
+            className="input-style"
           >
-            <option value="">Select Unit</option>
-            <option value="ml/dL">mg/dL</option>
+            <option value="">Unit</option>
+            <option value="mg/dL">mg/dL</option>
             <option value="g/dL">g/dL</option>
           </select>
 
           <input
             type="number"
             name="quantity"
-            placeholder="Quantity"
+            placeholder="Value"
             value={formData.quantity}
             onChange={handleChange}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="input-style"
           />
         </div>
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold
-                     hover:bg-blue-700 transition duration-300"
+          className="w-full bg-gradient-to-r from-blue-600 to-indigo-600
+                     text-white p-3 rounded-xl font-semibold
+                     hover:scale-[1.02] transition transform"
         >
-          Submit
+          Save Lab Result
         </button>
       </form>
     </div>
